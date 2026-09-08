@@ -1,0 +1,227 @@
+:root {
+  --sky-top: #7ec8e3;
+  --sky-mid: #3aa8c1;
+  --sea: #0e6b7a;
+  --sand: #f6e2b3;
+  --coral: #ff8a65;
+  --leaf: #3d8b4a;
+  --ink: #16343a;
+  --foam: #fff8e8;
+  --shadow: rgba(12, 48, 56, 0.28);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  overflow: hidden;
+  font-family: "Nunito", "Trebuchet MS", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 20% 0%, #b8ecff 0%, transparent 42%),
+    radial-gradient(circle at 90% 10%, #ffe7a8 0%, transparent 38%),
+    linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 42%, var(--sea) 100%);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 10px 16px;
+  gap: 8px;
+}
+
+.hud {
+  width: min(100%, 540px);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 18px;
+  background: rgba(255, 248, 232, 0.88);
+  box-shadow: 0 8px 20px var(--shadow);
+  backdrop-filter: blur(6px);
+}
+
+.hud-block {
+  text-align: center;
+}
+
+.hud-label {
+  display: block;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #4a6f76;
+}
+
+#score,
+#level,
+#lives {
+  font-family: "Fredoka", "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+#lives {
+  letter-spacing: 0.08em;
+}
+
+#stage {
+  position: relative;
+  width: min(100%, 540px);
+  line-height: 0;
+}
+
+#game {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 20px;
+  background: #1f8fa0;
+  box-shadow: 0 16px 36px var(--shadow);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 18px;
+  text-align: center;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(14, 107, 122, 0.18), rgba(14, 107, 122, 0.42)),
+    rgba(255, 248, 232, 0.92);
+  backdrop-filter: blur(3px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #0e6b7a;
+}
+
+h1,
+h2 {
+  margin: 0;
+  font-family: "Fredoka", "Nunito", sans-serif;
+  font-weight: 700;
+  line-height: 1.05;
+  color: #0b4f5a;
+}
+
+h1 {
+  font-size: clamp(2rem, 8vw, 3.1rem);
+}
+
+h2 {
+  font-size: clamp(1.7rem, 6vw, 2.4rem);
+}
+
+.tagline,
+#message-body {
+  max-width: 28rem;
+  margin: 10px 0 0;
+  font-size: 1rem;
+  line-height: 1.45;
+}
+
+.howto {
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #2b4b51;
+}
+
+kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: #fff;
+  box-shadow: 0 1px 0 #c9b48a;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+
+button {
+  margin-top: 16px;
+  padding: 12px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffb347, #ff8a3d);
+  color: #4a2208;
+  font-family: "Fredoka", "Nunito", sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #c45d1c, 0 10px 18px rgba(0, 0, 0, 0.18);
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(3px);
+  box-shadow: 0 3px 0 #c45d1c;
+}
+
+.dpad {
+  display: none;
+  width: min(100%, 240px);
+  height: 168px;
+  position: relative;
+  margin-top: 4px;
+}
+
+.pad-btn {
+  position: absolute;
+  width: 64px;
+  height: 56px;
+  margin: 0;
+  padding: 0;
+  font-size: 1.1rem;
+  color: #0b4f5a;
+  background: rgba(255, 248, 232, 0.92);
+  box-shadow: 0 4px 0 #c9b48a;
+}
+
+.pad-up { top: 0; left: 88px; }
+.pad-down { top: 112px; left: 88px; }
+.pad-left { top: 56px; left: 20px; }
+.pad-right { top: 56px; left: 156px; }
+
+@media (pointer: coarse) {
+  .dpad {
+    display: block;
+  }
+}
+
+@media (max-height: 760px) {
+  .howto {
+    display: none;
+  }
+  .tagline {
+    font-size: 0.92rem;
+  }
+}

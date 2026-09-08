@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <meta name="theme-color" content="#0e6b7a" />
+  <title>Ayaan's Coco World</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="hud" aria-live="polite">
+      <div class="hud-block">
+        <span class="hud-label">Score</span>
+        <span id="score">0</span>
+      </div>
+      <div class="hud-block">
+        <span class="hud-label">Level</span>
+        <span id="level">1</span>
+      </div>
+      <div class="hud-block lives-block">
+        <span class="hud-label">Lives</span>
+        <span id="lives" aria-label="lives remaining"></span>
+      </div>
+    </header>
+
+    <main id="stage">
+      <canvas id="game" width="504" height="552" aria-label="Ayaan's Coco World maze"></canvas>
+
+      <section id="title-screen" class="overlay" aria-labelledby="game-title">
+        <p class="eyebrow">A beach maze adventure</p>
+        <h1 id="game-title">Ayaan's Coco World</h1>
+        <p class="tagline">You are a coconut. Eat the beach. Dodge <strong>Boot</strong> the bird.</p>
+        <ul class="howto">
+          <li>Move with <kbd>Arrow keys</kbd> or <kbd>WASD</kbd></li>
+          <li>On a phone, swipe the maze or use the pad</li>
+          <li>Nibble fruit, plants, and beach snacks</li>
+          <li>Power snacks scare Boot — gulp him for bonus points</li>
+          <li>Clear the maze to win. Three lives.</li>
+        </ul>
+        <button id="start-btn" type="button">Start game</button>
+      </section>
+
+      <section id="message-screen" class="overlay hidden" aria-live="assertive">
+        <h2 id="message-title"></h2>
+        <p id="message-body"></p>
+        <button id="message-btn" type="button">Continue</button>
+      </section>
+    </main>
+
+    <div id="dpad" class="dpad" aria-hidden="true">
+      <button type="button" data-dir="up" class="pad-btn pad-up">▲</button>
+      <button type="button" data-dir="left" class="pad-btn pad-left">◀</button>
+      <button type="button" data-dir="down" class="pad-btn pad-down">▼</button>
+      <button type="button" data-dir="right" class="pad-btn pad-right">▶</button>
+    </div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
