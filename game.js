@@ -33,7 +33,7 @@
     "#.....###...###.....#",
     "#.##.....#.#.....##.#",
     "#o##.###.#.#.###.##o#",
-    "#.....#.......#.....#",
+    "#.....#..._...#.....#",
     "#####################",
   ];
 
@@ -228,17 +228,21 @@
 
   function tone(freq, dur, type, vol) {
     if (!audioCtx) return;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type || "sine";
-    osc.frequency.value = freq;
-    gain.gain.value = vol || 0.06;
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    const t = audioCtx.currentTime;
-    gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    osc.start(t);
-    osc.stop(t + dur);
+    try {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type || "sine";
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(Math.max(0.001, vol || 0.06), audioCtx.currentTime);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      const t = audioCtx.currentTime;
+      gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
+      osc.start(t);
+      osc.stop(t + dur);
+    } catch (_) {
+      /* audio is optional */
+    }
   }
 
   function canStep(c, r, walkFn) {
@@ -249,17 +253,23 @@
     return { c: Math.floor(actor.x / TILE), r: Math.floor(actor.y / TILE) };
   }
 
+  function currentTile(actor) {
+    return {
+      c: Math.round((actor.x - TILE / 2) / TILE),
+      r: Math.round((actor.y - TILE / 2) / TILE),
+    };
+  }
+
   function nearCenter(actor) {
-    const { x, y } = tileCenter(Math.round((actor.x - TILE / 2) / TILE), Math.round((actor.y - TILE / 2) / TILE));
-    const c = Math.round((actor.x - TILE / 2) / TILE);
-    const r = Math.round((actor.y - TILE / 2) / TILE);
+    const { c, r } = currentTile(actor);
     const mid = tileCenter(c, r);
-    return Math.abs(actor.x - mid.x) <= actor.speed + 0.05 && Math.abs(actor.y - mid.y) <= actor.speed + 0.05;
+    // Must be tighter than one step, or actors snap back and never leave a tile.
+    const threshold = Math.max(0.45, actor.speed * 0.5);
+    return Math.abs(actor.x - mid.x) <= threshold && Math.abs(actor.y - mid.y) <= threshold;
   }
 
   function snapCenter(actor) {
-    const c = Math.round((actor.x - TILE / 2) / TILE);
-    const r = Math.round((actor.y - TILE / 2) / TILE);
+    const { c, r } = currentTile(actor);
     const mid = tileCenter(c, r);
     actor.c = c;
     actor.r = r;
@@ -269,9 +279,8 @@
 
   function tryDir(actor, dir, walkFn) {
     if (dir == null || dir < 0) return false;
-    const c = Math.round((actor.x - TILE / 2) / TILE) + DIRS[dir].x;
-    const r = Math.round((actor.y - TILE / 2) / TILE) + DIRS[dir].y;
-    return canStep(c, r, walkFn);
+    const { c, r } = currentTile(actor);
+    return canStep(c + DIRS[dir].x, r + DIRS[dir].y, walkFn);
   }
 
   function moveActor(actor, walkFn, chooser) {
@@ -774,12 +783,16 @@
   }
 
   function loop(now) {
-    if (!state.lastStamp) state.lastStamp = now;
-    const dt = Math.min(32, now - state.lastStamp);
-    state.lastStamp = now;
-    const steps = dt > 20 ? 2 : 1;
-    for (let i = 0; i < steps; i++) update(now);
-    draw();
+    try {
+      if (!state.lastStamp) state.lastStamp = now;
+      const dt = Math.min(32, now - state.lastStamp);
+      state.lastStamp = now;
+      const steps = dt > 20 ? 2 : 1;
+      for (let i = 0; i < steps; i++) update(now);
+      draw();
+    } catch (err) {
+      console.error(err);
+    }
     requestAnimationFrame(loop);
   }
 
